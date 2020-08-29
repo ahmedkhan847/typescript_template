@@ -1,13 +1,19 @@
 import express from "express";
-import HomeRouter from "./routes";
-import UserRouter from "./routes/user";
 import SequelizeConnection from "./utl/database";
+import helmet from "helmet";
+import bodyParser from "body-parser";
+import router from "./routes";
+import cors from "cors";
 
 const app = express();
 const port = 3000;
 
-app.use("/", HomeRouter);
-app.use("/user", UserRouter);
+app.use(cors());
+app.use(helmet());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(router);
 
 app.listen(port, async (err) => {
   if (err) {
