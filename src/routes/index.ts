@@ -5,7 +5,7 @@ import UserRouter from "./user";
 const HomeRouter = express.Router();
 
 HomeRouter.get("/", (req: Request, res: Response) => {
-  res.send("The sedulous hyena ate the antelope!");
+  res.send("The server is started");
 });
 
 const routes = [
