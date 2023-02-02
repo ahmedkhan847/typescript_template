@@ -1,26 +1,25 @@
-import express from "express";
+import express, {Request, Response, NextFunction} from "express";
 import SequelizeConnection from "./utl/database";
 import helmet from "helmet";
 import bodyParser from "body-parser";
 import router from "./routes";
 import cors from "cors";
+import { env } from "process";
 
 const app = express();
-const port = 3000;
+const port = env.NODE_PORT || 3000;
 
 app.use(cors());
 app.use(helmet());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use(router);
 
-app.listen(port, async (err) => {
-  if (err) {
-    return console.error(err);
-  }
+app.use(async function (req: Request, res: Response, next: NextFunction) {
   const sequelizeConnection = new SequelizeConnection();
   sequelizeConnection.init();
   await sequelizeConnection.connection.sync({ force: true });
-  return console.log(`server is listening on ${port}`);
+  next()
 });
+
+app.listen(port);
